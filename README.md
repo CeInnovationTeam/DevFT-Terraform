@@ -42,15 +42,15 @@ Provisionar recursos dentro do OCI utilizando infraestrutura como código.
 
   
 
-**1. git clone https://github.com/pedrocarrijo95/ftshopcartJava.git**
+  **1. git clone https://github.com/CeInnovationTeam/DevFT-Terraform.git**
 
-  
+    
 
-OU
+  OU
 
-  
+    
 
-**2. download do .zip direto no github**
+  **2. download do .zip direto no github**
 
   
 
