@@ -54,7 +54,7 @@ Provisionar recursos dentro do OCI utilizando infraestrutura como código.
 
   
 
-![](./imgs/printdownload.PNG)
+![](./imgs/printdownloads.PNG)
 
   
 
