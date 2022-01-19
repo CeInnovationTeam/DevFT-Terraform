@@ -1,0 +1,2 @@
+# DevFT-Terraform
+Terraform OCI
