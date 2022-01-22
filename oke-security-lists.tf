@@ -131,9 +131,42 @@ resource "oci_core_security_list" "oke_lb_security_list" {
   compartment_id = local.oke_compartment_id
   display_name   = "oke-lb-seclist-${local.app_name_normalized}-${random_string.deploy_id.result}"
   vcn_id         = oci_core_virtual_network.oke_vcn[0].id
-
   count        = var.create_new_oke_cluster ? 1 : 0
   defined_tags = { "${oci_identity_tag_namespace.ArchitectureCenterTagNamespace.name}.${oci_identity_tag.ArchitectureCenterTag.name}" = var.release }
+
+  egress_security_rules {
+    description      = "Worker Nodes access to Internet"
+    destination      = lookup(var.network_cidrs, "ALL-CIDR")
+    destination_type = "CIDR_BLOCK"
+    protocol         = local.all_protocols
+    stateless        = false
+  }
+
+  ingress_security_rules {
+        protocol    = "6"
+        source      = lookup(var.network_cidrs, "ALL-CIDR")
+        description = "Para o APIGW https"
+        source_type = "CIDR_BLOCK"
+        stateless   = false
+
+        tcp_options {
+        max = "443"
+        min = "443"
+        }
+    }
+
+  ingress_security_rules {
+        protocol    = "6"
+        source      = lookup(var.network_cidrs, "ALL-CIDR")
+        description = "Para o APIGW http"
+        source_type = "CIDR_BLOCK"
+        stateless   = false
+
+        tcp_options {
+        max = "80"
+        min = "80"
+        }
+    }
 }
 
 resource "oci_core_security_list" "oke_endpoint_security_list" {
