@@ -166,12 +166,6 @@ variables:
     description: "The compartment in which to create resources"
     required: true
 
-  compartment_name: 
-    type: oci:identity:compartment:name
-    title: "Compartment Name"
-    description: "The compartment in which to create resources"
-    required: true
-
   app_name:
     type: string
     title: "Project Name"
