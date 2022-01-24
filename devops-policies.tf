@@ -6,7 +6,7 @@ resource "oci_identity_dynamic_group" "devops_pipln_dg" {
   name           = "${local.app_name_normalized}-devops-pipln-dg-${random_string.deploy_id.result}"
   description    = "${var.app_name} DevOps Pipeline Dynamic Group"
   compartment_id = var.tenancy_ocid
-  matching_rule  = "All {resource.type = 'devopsdeploypipeline', resource.compartment.id = '${var.compartment_id}'}"
+  matching_rule  = "ANY {resource.type = 'devopsdeploypipeline', resource.compartment.id = '${var.compartment_id}'}"
 
   provider = oci.home_region
 
