@@ -6,7 +6,7 @@ resource "oci_identity_dynamic_group" "oke_nodes_dg" {
   name           = "${local.app_name_normalized}-oke-cluster-dg-${random_string.deploy_id.result}"
   description    = "${var.app_name} Cluster Dynamic Group"
   compartment_id = var.tenancy_ocid
-  matching_rule  = "ANY {ALL {instance.compartment.id = '${local.oke_compartment_id}'},ALL {resource.type = 'cluster', resource.compartment.id = '${local.oke_compartment_id}'}}"
+  matching_rule  = "ANY {ALL {instance.compartment.id = '${local.oke_compartment_id}'},ALL {resource.type = 'cluster', resource.compartment.id = '${local.oke_compartment_id}'}, ALL {resource.type = 'devopsbuildpipeline', resource.compartment.id = '${local.oke_compartment_id}'}}"
 
   provider = oci.home_region
 
@@ -39,9 +39,9 @@ resource "oci_identity_policy" "kms_compartment_policies" {
 
 resource "oci_identity_policy" "oke_tenancy_policies" {
   name           = "${local.app_name_normalized}-oke-cluster-tenancy-policies-${random_string.deploy_id.result}"
-  description    = "${var.app_name} OKE Cluster Tenancy Policies"
+  description    = "${var.app_name} Dev Tenancy Policies"
   compartment_id = var.tenancy_ocid
-  statements     = local.oke_tenancy_statements
+  statements     = local.dev_tenancy_statements
 
   depends_on = [oci_identity_dynamic_group.oke_nodes_dg]
 
@@ -51,8 +51,8 @@ resource "oci_identity_policy" "oke_tenancy_policies" {
 }
 
 locals {
-  oke_tenancy_statements = concat(
-    local.oci_grafana_metrics_statements
+  dev_tenancy_statements = concat(
+    local.oci_statements
   )
   oke_compartment_statements = concat(
     local.oci_grafana_logs_statements,
@@ -62,15 +62,17 @@ locals {
   kms_compartment_statements = concat(
     local.allow_group_manage_vault_keys_statements
   )
-}
 
+}
 locals {
   oke_nodes_dg     = var.create_dynamic_group_for_nodes_in_compartment ? oci_identity_dynamic_group.oke_nodes_dg.0.name : "void"
   oci_vault_key_id = "void"
   #var.use_encryption_from_oci_vault ? (var.create_new_encryption_key ? oci_kms_key.mushop_key[0].id : var.existent_encryption_key_id) : "void"
-  oci_grafana_metrics_statements = [
+  oci_statements = [
     "Allow dynamic-group ${local.oke_nodes_dg} to read metrics in tenancy",
-    "Allow dynamic-group ${local.oke_nodes_dg} to read compartments in tenancy"
+    "Allow dynamic-group ${local.oke_nodes_dg} to read compartments in tenancy",
+    "Allow dynamic-group ${local.oke_nodes_dg} to manage repos in tenancy",
+    "Allow dynamic-group ${local.oke_nodes_dg} to manage devops-family in tenancy"
   ]
   oci_grafana_logs_statements = [
     "Allow dynamic-group ${local.oke_nodes_dg} to read log-groups in compartment id ${local.oke_compartment_id}",
