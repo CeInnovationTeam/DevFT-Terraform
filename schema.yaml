@@ -31,7 +31,6 @@ variableGroups:
   variables:
     - compartment_id
     - app_name
-    - execute_deployment
     - show_advanced
     - log_group_display_name
     - notification_topic_name
@@ -48,28 +47,6 @@ variableGroups:
     - environment_type 
     - environment_description 
     - environment_display_name
-
-- title: Artefatos DevOps
-  visible: 
-      and:
-        - show_advanced
-  variables:
-    - deploy_artifact_source_type
-    - deploy_artifact_type
-    - argument_substitution_mode
-
-
-- title: Pipelines & Stages
-  visible: 
-      and:
-        - show_advanced  
-  variables:
-    - deploy_pipeline_display_name
-    - deploy_pipeline_description
-    - deploy_stage_deploy_stage_type
-    - deploy_stage_namespace
-    - deploy_stage_display_name
-    - deploy_stage_description
 
 - title: Configuração de Políticas
   description: Configuração de Políticas para a implementação do stack
@@ -170,13 +147,6 @@ variables:
     type: string
     title: "Project Name"
     required: true
-
-  execute_deployment:
-    type: boolean
-    title: "Executar implantação no pipeline de DevOps?"
-    description: "Escolha se deseja iniciar a implantação no DevOps Pipeline como parte dessa automação do Terraform."
-    visible: true
-    default: false
   
   show_advanced:
     type: boolean
@@ -276,33 +246,6 @@ variables:
     title: "Nome do ambiente"
     description: "Nome para o ambiente DevOps"
     default: "DevOps OKE Environment"
-
-  ############
-  # Artifacts
-  ############
-  deploy_artifact_source_type:
-    type: enum
-    enum:
-      - "INLINE"
-    title: "Tipo de origem do artefato"
-    description: "O tipo de artefato de origem. A pilha atualmente suporta apenas INLINE"
-    default: "INLINE"
-
-  deploy_artifact_type:
-    type: enum
-    enum:
-      - "KUBERNETES_MANIFEST"
-    title: "Tipo de artefato"
-    description: "O tipo de artefato. A pilha atualmente suporta apenas KUBERNETES_MANIFEST"
-    default: "KUBERNETES_MANIFEST"
-
-  argument_substitution_mode:
-    type: enum
-    enum:
-      - "NONE"
-    title: "Substituição de argumento para o artefato"
-    description: "Os artefatos podem ter argumentos que são substituídos por valores em tempo de execução. A pilha atualmente suporta apenas NONE"
-    default: "NONE"
   
   ###########
   # Pipeline
@@ -315,44 +258,6 @@ variables:
 
       Como alternativa, você pode fazer com que o administrador crie um grupo dinâmico para você. 
     default: true
-
-  deploy_pipeline_display_name:
-    type: string
-    title: "Nome do pipeline"
-    description: "Nome de exibição para o Pipeline"
-    default: "devops-oke-pipeline"
-
-  deploy_pipeline_description:
-    type: string
-    title: "Descrição do pipeline"
-    description: "Descrição do Pipeline"
-    default: "Devops Pipleline demo for OKE"
-
-  deploy_stage_deploy_stage_type:
-    type: enum
-    enum:
-      - "OKE_DEPLOYMENT"
-    title: "Stage type"
-    description: "Nome de exibição para o grupo de logs"
-    default: "OKE_DEPLOYMENT"
-
-  deploy_stage_namespace:
-    type: string
-    title: "Namespace do Kubernetes a ser usado"
-    description: "Namespace do Kubernetes a ser usado para implantação."
-    default: "default"
-
-  deploy_stage_display_name:
-    type: string
-    title: "Stage Name"
-    description: "Nome para o estágio de implantação."
-    default: "deploy_OKE"
-
-  deploy_stage_description:
-    type: string
-    title: "Stage Description"
-    description: "Descrição para o estágio de implantação"
-    default: "test deployment to OKE"
     
   ####################  
   ## OKE 
