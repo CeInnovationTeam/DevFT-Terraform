@@ -72,7 +72,9 @@ locals {
     "Allow dynamic-group ${local.oke_nodes_dg} to read metrics in tenancy",
     "Allow dynamic-group ${local.oke_nodes_dg} to read compartments in tenancy",
     "Allow dynamic-group ${local.oke_nodes_dg} to manage repos in tenancy",
-    "Allow dynamic-group ${local.oke_nodes_dg} to manage devops-family in tenancy"
+    "Allow dynamic-group ${local.oke_nodes_dg} to manage devops-family in tenancy",
+    "Allow service vulnerability-scanning-service to read repos in tenancy",
+    "Allow service vulnerability-scanning-service to read compartments in tenancy"
   ]
   oci_grafana_logs_statements = [
     "Allow dynamic-group ${local.oke_nodes_dg} to read log-groups in compartment id ${local.oke_compartment_id}",
